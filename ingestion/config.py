@@ -35,3 +35,12 @@ SEMANTIC_SPLIT_THRESHOLD = 0.55  # cosine similarity below this = topic shift
 # asks Currents for articles published after this point (avoids re-fetching
 # and re-embedding the same articles).
 LAST_RUN_TABLE = f"{UC_CATALOG}.{UC_SCHEMA}.pipeline_state"
+
+# --- Vector Search ---
+# Free Edition: 1 AI Search endpoint, 1 search unit - so this endpoint is
+# shared by whatever indexes you build, keep it to just this one for now.
+VS_ENDPOINT_NAME = os.environ.get("VS_ENDPOINT_NAME", "news-app-endpoint")
+VS_INDEX_NAME = f"{UC_CATALOG}.{UC_SCHEMA}.chunks_index"
+# Must match whatever EMBEDDING_ENDPOINT actually outputs - check the
+# model's docs/response before setting this (e.g. bge-large-en = 1024).
+EMBEDDING_DIMENSION = int(os.environ.get("EMBEDDING_DIMENSION", "1024"))
