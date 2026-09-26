@@ -14,6 +14,7 @@ from .chunking import chunk_article
 from .tagging import tag_chunk
 from .embeddings import embed_texts
 from .delta_writer import write_chunks, get_last_run, record_run
+from index.sync import trigger_sync
 
 
 def run(spark) -> None:
@@ -49,6 +50,8 @@ def run(spark) -> None:
         rows.append({**meta, "embedding": vector})
 
     write_chunks(spark, rows)
+    if rows:
+        trigger_sync()
     record_run(
         spark,
         run_at=run_started_at,
