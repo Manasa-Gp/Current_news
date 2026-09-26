@@ -1,0 +1,29 @@
+{
+  "name": "tech-news-daily-pipeline",
+  "schedule": {
+    "quartz_cron_expression": "0 0 6 * * ?",
+    "timezone_id": "America/New_York",
+    "pause_status": "UNPAUSED"
+  },
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "run_pipeline",
+      "spark_python_task": {
+        "python_file": "/Workspace/Repos/<your-username>/<this-repo-name>/ingestion/pipeline.py"
+      },
+      "environment_key": "default"
+    }
+  ],
+  "environments": [
+    {
+      "environment_key": "default",
+      "spec": {
+        "client": "1",
+        "dependencies": [
+          "-r /Workspace/Repos/<your-username>/<this-repo-name>/requirements.txt"
+        ]
+      }
+    }
+  ]
+}

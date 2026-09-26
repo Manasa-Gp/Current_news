@@ -8,6 +8,8 @@ notebook) where `spark` is provided by the runtime.
 import uuid
 from datetime import datetime, timezone
 
+from pyspark.sql import SparkSession
+
 from . import config
 from .currents_client import fetch_articles
 from .chunking import chunk_article
@@ -63,6 +65,7 @@ def run(spark) -> None:
 
 
 if __name__ == "__main__":
-    # When run as a Databricks notebook/job task, `spark` is injected into
-    # globals by the runtime.
-    run(spark)  # noqa: F821
+    # Works whether this runs as a notebook cell (where `spark` already
+    # exists) or as a plain script job task (where it doesn't yet).
+    spark_session = SparkSession.builder.getOrCreate()
+    run(spark_session)
