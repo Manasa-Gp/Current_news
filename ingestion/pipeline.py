@@ -12,7 +12,7 @@ from .chunking import chunk_article
 from .tagging import tag_chunk
 from .embeddings import embed_texts
 from .delta_writer import write_chunks, get_last_run, record_run
-
+from index.sync import trigger_sync
 
 import uuid
 from datetime import datetime, timezone
@@ -44,6 +44,8 @@ def run(spark):
     rows = [{**meta, "embedding": vector} for meta, vector in zip(chunk_meta, vectors)]
 
     write_chunks(spark, rows)
+    if rows:
+        trigger_sync()
     record_run(spark, run_at=run_started_at, articles_fetched=len(articles), chunks_written=len(rows))
 
     print(f"Fetched {len(articles)} articles, wrote {len(rows)} chunks.")

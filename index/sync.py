@@ -1,19 +1,17 @@
-"""
-Triggers a sync on the (already-created) Delta Sync index so it picks up
-whatever rows the daily pipeline just wrote. Called from pipeline.py right
-after write_chunks() - not meant to be run standalone on a schedule of
-its own.
-"""
+# index/sync.py
+
+# WHAT: tells the (already-created) index to pull in new rows.
+# WHY:  the index uses TRIGGERED sync, not CONTINUOUS - it only updates
+#       when told to, so something has to actually call this.
+# NEXT: pipeline.py calls this once, right after write_chunks() succeeds.
 
 from databricks.vector_search.client import VectorSearchClient
 
-from ingestion import config
+VS_ENDPOINT_NAME = "news-app-endpoint"
+VS_INDEX_NAME = "main.news_app.chunks_index"
 
 
 def trigger_sync() -> None:
     client = VectorSearchClient()
-    index = client.get_index(
-        endpoint_name=config.VS_ENDPOINT_NAME,
-        index_name=config.VS_INDEX_NAME,
-    )
+    index = client.get_index(endpoint_name=VS_ENDPOINT_NAME, index_name=VS_INDEX_NAME)
     index.sync()
