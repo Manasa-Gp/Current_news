@@ -15,7 +15,17 @@ from dotenv import load_dotenv
 load_dotenv()  # reads .env into environment variables, once, at import time
 
 CURRENTS_API_URL = "https://api.currentsapi.services/v1/search"
-API_KEY = os.environ.get("CURRENTS_API_KEY")
+def _get_api_key() -> str:
+    try:
+        from pyspark.sql import SparkSession
+        from pyspark.dbutils import DBUtils
+        dbutils = DBUtils(SparkSession.builder.getOrCreate())
+        return dbutils.secrets.get(scope="news-app", key="currents-api-key")
+    except Exception:
+        return os.environ.get("CURRENTS_API_KEY")
+
+
+API_KEY = _get_api_key()
 
 def _rfc3339(dt: datetime) -> str:
     # Currents rejects plain dates like "2026-09-01" - it wants this exact
