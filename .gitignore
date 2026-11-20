@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 .databricks/
 news_trail.py
+news-app-frontend/
