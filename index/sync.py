@@ -7,7 +7,6 @@ its own.
 
 from databricks.vector_search.client import VectorSearchClient
 
-from . import config as index_config
 from ingestion import config
 
 

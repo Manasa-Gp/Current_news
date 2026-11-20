@@ -18,12 +18,7 @@
   "environments": [
     {
       "environment_key": "default",
-      "spec": {
-        "client": "1",
-        "dependencies": [
-          "-r /Workspace/Repos/<your-username>/<this-repo-name>/requirements.txt"
-        ]
-      }
+      "spec": { "client": "1", "dependencies": [] }
     }
   ]
 }
